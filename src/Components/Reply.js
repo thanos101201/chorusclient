@@ -8,7 +8,7 @@ function Reply(props) {
   const [ replies, setReplies ] = useState([]);
   const [ id, setId ] = useState("");
   const [ open, setOpen ] = useState("");
-
+  const [ reload, setReload ] = useState(false);
   const toggle = (e) => {
     if(e === open){
       setOpen("");
@@ -34,7 +34,7 @@ function Reply(props) {
     }).catch((eror) => {
       alert(eror.message);
     });
-  }, []);
+  }, [reload]);
 
   const renderReplies = () => {
     if(replies.length === 0){
@@ -58,10 +58,37 @@ function Reply(props) {
               </div>
               <div className='row d-flex justify-content-center'>
                 <div className='col-12 col-md-6 d-flex align-items-center'>
-                  <Button>Like</Button>
+                  <Button onClick={() => {
+                    axios.post('http://localhost:3001/reply/like', {
+                      email: localStorage.getItem('chem'),
+                      replyId : e._id
+                    }).then((response) => {
+                      if(response.data.message === 'Reply liked'){
+                        setReload(!reload);
+                      }
+                      else{
+                        alert(response.data.message);
+                      }
+                    }).catch((eror) => {
+                      alert(eror.message);
+                    })
+                  }}>Like</Button>
                 </div>
                 <div className='col-12 col-md-6 d-flex align-items-center'>
-                  <Button>Dislike</Button>
+                  <Button onClick={() => {
+                    axios.post('http://localhost:3001/reply/dislike', {
+                      email: localStorage.getItem('chem'),
+                      replyId : e._id
+                    }).then((response) => {
+                      if(response.data.message === 'Reply disliked'){
+                      }
+                      else{
+                        alert(response.data.message);
+                      }
+                    }).catch((eror) => {
+                      alert(eror.message);
+                    })
+                  }}>Dislike</Button>
                 </div>
               </div>
             </AccordionBody>
@@ -75,7 +102,20 @@ function Reply(props) {
     <div className='container'>
       <div className='row d-flex justify-content-center'>
         <div className='col-12 col-md-8 d-flex align-items-center'>
-          <Button>Join</Button>
+          <Button onClick={() => {
+            axios.post('http://localhost:3001/reply/join', {
+              email: email
+            }).then((response) => {
+              if(response.data.message === 'Reply joined'){
+                setReload(!reload);
+              }
+              else{
+                alert(response.data.message);
+              }
+            }).catch((eror) => {
+              alert(eror.message);
+            })
+          }}>Join</Button>
         </div>
       </div>
         <div className='row d-flex justify-content-center'>

@@ -7,6 +7,8 @@ function History() {
   const [ replies, setReplies ] = useState([]);
   const [ id, setId ] = useState("");
   const [ open, setOpen ] = useState("");
+  const [ reload, setReload ] = useState(false);
+  const [ email, setEmail ] = useState("");
 
   const toggle = (e) => {
     if(e === open){
@@ -21,6 +23,7 @@ function History() {
 
   useEffect(() => {
     let id = state.id
+    setEmail(localStorage.getItem('chem'));
     setId(id);
     axios.get('http://localhost:3001/history', {
       headers: {
@@ -33,7 +36,7 @@ function History() {
     }).catch((eror) => {
       alert(eror.message);
     });
-  }, []);
+  }, [reload]);
 
   const renderReplies = () => {
     if(replies.length === 0){
@@ -57,10 +60,40 @@ function History() {
               </div>
               <div className='row d-flex justify-content-center'>
                 <div className='col-12 col-md-6 d-flex align-items-center'>
-                  <Button>Like</Button>
+                  <Button onClick={() => {
+                    axios.post('http://localhost:3001/history/like', {
+                      email: localStorage.getItem('chem'),
+                      id : id,
+                      index: i-1
+                    }).then((response) => {
+                      if(response.data.message === 'liked'){
+                        setReload(!reload);
+                      }
+                      else{
+                        alert(response.data.message);
+                      }
+                    }).catch((eror) => {
+                      alert(eror.message);
+                    })
+                  }}>Like</Button>
                 </div>
                 <div className='col-12 col-md-6 d-flex align-items-center'>
-                  <Button>Dislike</Button>
+                  <Button onClick={() => {
+                    axios.post('http://localhost:3001/history/dislike', {
+                      email: localStorage.getItem('chem'),
+                      id: id,
+                      index : i-1
+                    }).then((response) => {
+                      if(response.data.message === 'disliked'){
+                        setReload(!reload);
+                      }
+                      else{
+                        alert(response.data.message);
+                      }
+                    }).catch((eror) => {
+                      alert(eror.message);
+                    })
+                  }}>Dislike</Button>
                 </div>
               </div>
             </AccordionBody>
@@ -74,7 +107,17 @@ function History() {
     <div className='container'>
       <div className='row d-flex justify-content-center'>
         <div className='col-12 col-md-8 d-flex align-items-center'>
-          <Button>Join</Button>
+          <Button onClick={() => {
+            axios.post('http://localhost:3001/reply/join', {
+              email: email
+            }).then((response) => {
+              if(response.data.message === 'history joined'){
+                setReload(!reload);
+              }
+            }).catch((eror) => {
+              alert(eror.message);
+            })
+          }}>Join</Button>
         </div>
       </div>
         <div className='row d-flex justify-content-center'>

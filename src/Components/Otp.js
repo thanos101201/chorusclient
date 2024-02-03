@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Card, CardBody, CardHeader, CardTitle, Form, FormGroup, Input, Label } from 'reactstrap';
 import axios from 'axios';
@@ -7,9 +7,10 @@ function Otp() {
   const [ email, setEmail ] = useState("");
   const [ text, setText ] = useState("Get OTP");
   const [ otp, setOtp ] = useState("");
+  const [ reload, setReload ] = useState(false);
   
   const renderOtp = () => {
-    if(text === 'Verify OTP'){
+    if(text === 'Verify Otp'){
       return(
         <div className='row d-flex justify-content-center'>
           <div className='col-10 col-md-3 d-flex align-items-center'>
@@ -30,10 +31,14 @@ function Otp() {
     }
   }
 
+  useEffect(() => {
+  }, [text]);
   const sendOtp = () => {
     if(text === 'Get OTP'){
-      axios.post('http://localhost:3001/otp', {
-        email: email
+      axios.get('http://localhost:3001/otp', {
+        headers: {
+          email: email
+        }
       }).then((response) => {
         if(response.data.message === 'Otp is send'){
           setText("Verify Otp");
@@ -46,13 +51,13 @@ function Otp() {
       });
     }
     else{
-      axios.post('http://localhost:3001/otp/verify', {
+      axios.post('http://localhost:3001/otp', {
         email: email,
-        otpNum: otp
+        otp: otp
       }).then((response) => {
         if(response.data.message === 'Otp Verified'){
           localStorage.setItem('chem', email);
-          window.open("http://localhost:3000/", "_self");
+          window.open("http://localhost:3000/sign", "_self");
         }
         else{
           alert('Invalid otp');
@@ -63,10 +68,11 @@ function Otp() {
     }
   }
   return (
-    <div className='container'>
-      <div className='row d-flex justify-content-center'>
-        <div className='col-10 col-md-6 d-flex align-items-center'>
-          <Card>
+    <div className='container mt-5'>
+      <div className='row d-flex justify-content-center mt-5'>
+        <div className='col-10 col-md-2 d-flex align-items-center'></div>
+        <div className='col-10 col-md-9 d-flex align-items-center'>
+          <Card className='shadow-lg'>
             <CardHeader>
               <CardTitle>
                 <h3>OTP</h3>
@@ -74,17 +80,17 @@ function Otp() {
             </CardHeader>
             <CardBody>
               <div className='row d-flex justify-content-center'>
-                <div className='col-12 col-md-8 d-flex align-items-center'>
+                <div className='col-12 d-flex align-items-center'>
                   <Form>
                     <FormGroup>
                       <div className='row d-flex justify-content-center'>
-                        <div className='col-10 col-md-3 d-flex align-items-center'>
+                        <div className='col-10 col-md-4 d-flex align-items-center'>
                           <Label>
-                            <h4>Email : </h4>
+                            <h5>Email : </h5>
                           </Label>
                         </div>
-                        <div className='col-10 col-md-9 d-flex align-items-center'>
-                          <Input placeholder='Enter your registered email' onChange={(e) => setEmail(e.target.value)} />
+                        <div className='col-10 col-md-8 d-flex align-items-center'>
+                          <Input placeholder='Enter your email' onChange={(e) => setEmail(e.target.value)} />
                         </div>
                       </div>
                     </FormGroup>
@@ -94,7 +100,7 @@ function Otp() {
                     <FormGroup>
                       <div className='row d-flex justify-content-center'>
                         <div className='col-10 col-md-6 d-flex align-items-center'>
-                          <Button onClick={() => {
+                          <Button className='btn btn-success' onClick={() => {
                             sendOtp();
                           }}>{text}</Button>
                         </div>

@@ -23,9 +23,10 @@ function Login() {
 
   return (
     <div className='container'>
-      <div className='row d-flex justify-content-center'>
-        <div className='col-10 col-md-6 d-flex align-items-center'>
-          <Card>
+      <div className='row d-flex justify-content-center mt-5'>
+        <div className='col-10 col-md-2 d-flex align-items-center'></div>
+        <div className='col-10 col-md-9 d-flex align-items-center'>
+          <Card className='shadow-lg'>
             <CardHeader>
               <CardTitle>
                 <h3>Login</h3>
@@ -33,41 +34,41 @@ function Login() {
             </CardHeader>
             <CardBody>
               <div className='row d-flex justify-content-center'>
-                <div className='col-12 col-md-8 d-flex align-items-center'>
+                <div className='col-12 d-flex align-items-center'>
                   <Form>
                     <FormGroup>
                       <div className='row d-flex justify-content-center'>
-                        <div className='col-10 col-md-3 d-flex align-items-center'>
+                        <div className='col-10 col-md-5 d-flex align-items-center'>
                           <Label>
-                            <h4>Email : </h4>
+                            <h5>Email : </h5>
                           </Label>
                         </div>
-                        <div className='col-10 col-md-9 d-flex align-items-center'>
-                          <Input placeholder='Enter your registered email' onChange={(e) => setEmail(e.target.value)} />
+                        <div className='col-10 col-md-7 d-flex align-items-center'>
+                          <Input placeholder='Enter your email' onChange={(e) => setEmail(e.target.value)} />
                         </div>
                       </div>
                     </FormGroup>
                     <FormGroup>
                       <div className='row d-flex justify-content-center'>
-                        <div className='col-10 col-md-3 d-flex align-items-center'>
+                        <div className='col-10 col-md-5 d-flex align-items-center'>
                           <Label>
-                            <h4>Password : </h4>
+                            <h5>Password : </h5>
                           </Label>
                         </div>
-                        <div className='col-10 col-md-9 d-flex align-items-center'>
+                        <div className='col-10 col-md-7 d-flex align-items-center'>
                           <Input placeholder='Enter your password' type='password' onChange={(e) => setPassword(e.target.value)} />
                         </div>
                       </div>
                     </FormGroup>
                     <FormGroup>
                       <div className='row d-flex justify-content-center'>
-                        <div className='col-10 col-md-6 d-flex align-items-center'>
-                          <Button onClick={() => {
+                        <div className='col-10 col-md-6 d-flex align-items-center g-3'>
+                          <Button className='m-1 btn btn-success' onClick={() => {
                             handleLogin();
                           }}>Login</Button>
                         </div>
                         <div className='col-10 col-md-6 d-flex align-items-center'>
-                          <Button onClick={() => {
+                          <Button className='m-1 btn btn-danger' onClick={() => {
                             window.open("http://localhost:3000/otp", "_self");
                           }}>Sign In</Button>
                         </div>

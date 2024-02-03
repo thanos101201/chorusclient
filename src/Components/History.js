@@ -9,6 +9,7 @@ function History() {
   const [ open, setOpen ] = useState("");
   const [ reload, setReload ] = useState(false);
   const [ email, setEmail ] = useState("");
+  const [ disabled, setDisabled ] = useState(false);
 
   const toggle = (e) => {
     if(e === open){

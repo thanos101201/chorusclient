@@ -10,6 +10,7 @@ function Reply(props) {
   const [ open, setOpen ] = useState("");
   const [ reload, setReload ] = useState(false);
   const [ disabled, setDisabled ] = useState(false);
+  const [ email, setEmail ] = useState("");
 
   const toggle = (e) => {
     if(e === open){
@@ -23,7 +24,12 @@ function Reply(props) {
   const { state } = useLocation();
 
   useEffect(() => {
+    if(state === null){
+      window.open("http://localhost:3000/question", "_self");
+    }
     let id = state.id
+
+    setEmail(localStorage.getItem('chem'));
     setId(id);
     axios.get('http://localhost:3001/reply', {
       headers: {

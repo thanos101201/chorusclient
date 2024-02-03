@@ -9,6 +9,8 @@ function Reply(props) {
   const [ id, setId ] = useState("");
   const [ open, setOpen ] = useState("");
   const [ reload, setReload ] = useState(false);
+  const [ disabled, setDisabled ] = useState(false);
+
   const toggle = (e) => {
     if(e === open){
       setOpen("");
@@ -36,6 +38,34 @@ function Reply(props) {
     });
   }, [reload]);
 
+  useEffect(() => {
+    axios.get('http://localhost:3001/history', {
+      headers: {
+        questionId: id
+      }
+    }).then((response) => {
+      if(response.data.message === 'Working history is here'){
+        let history = response.data.data[0].users;
+        if(history.indexOf(localStorage.getItem('chem')) !== -1){
+          setDisabled(true);
+        }
+        else{
+          setDisabled(false);
+        }
+      }
+    }).catch((eror) => {
+      alert(eror.message);
+    })
+  }, []);
+
+  const checkDisabled = (ar) => {
+    if(ar.indexOf(localStorage.get('chem')) !== -1){
+      return true;
+    }
+    return false;
+  }
+
+
   const renderReplies = () => {
     if(replies.length === 0){
       return(
@@ -58,7 +88,7 @@ function Reply(props) {
               </div>
               <div className='row d-flex justify-content-center'>
                 <div className='col-12 col-md-6 d-flex align-items-center'>
-                  <Button onClick={() => {
+                  <Button disabled={disabled || checkDisabled(e.upVotes)} onClick={() => {
                     axios.post('http://localhost:3001/reply/like', {
                       email: localStorage.getItem('chem'),
                       replyId : e._id
@@ -75,7 +105,7 @@ function Reply(props) {
                   }}>Like</Button>
                 </div>
                 <div className='col-12 col-md-6 d-flex align-items-center'>
-                  <Button onClick={() => {
+                  <Button disabled={disabled || checkDisabled(e.downVotes)} onClick={() => {
                     axios.post('http://localhost:3001/reply/dislike', {
                       email: localStorage.getItem('chem'),
                       replyId : e._id
@@ -102,7 +132,7 @@ function Reply(props) {
     <div className='container'>
       <div className='row d-flex justify-content-center'>
         <div className='col-12 col-md-8 d-flex align-items-center'>
-          <Button onClick={() => {
+          <Button disabled={disabled} onClick={() => {
             axios.post('http://localhost:3001/reply/join', {
               email: email
             }).then((response) => {

@@ -30,7 +30,7 @@ function History() {
         questionId : id
       }
     }).then((response) => {
-      if(response.data.message === 'Replies are here'){
+      if(response.data.message === 'Working history is here'){
         setReplies(response.data.data);
       }
     }).catch((eror) => {
@@ -38,6 +38,13 @@ function History() {
     });
   }, [reload]);
 
+  const checkDisabled = (ar) => {
+    if(ar.indexOf(localStorage.get('chem')) !== -1){
+      return true;
+    }
+    return false;
+  }
+  
   const renderReplies = () => {
     if(replies.length === 0){
       return(
@@ -60,7 +67,7 @@ function History() {
               </div>
               <div className='row d-flex justify-content-center'>
                 <div className='col-12 col-md-6 d-flex align-items-center'>
-                  <Button onClick={() => {
+                  <Button disabled={disabled || checkDisabled(e.upVotes)} onClick={() => {
                     axios.post('http://localhost:3001/history/like', {
                       email: localStorage.getItem('chem'),
                       id : id,
@@ -78,7 +85,7 @@ function History() {
                   }}>Like</Button>
                 </div>
                 <div className='col-12 col-md-6 d-flex align-items-center'>
-                  <Button onClick={() => {
+                  <Button disabled={disabled || checkDisabled(e.downVotes)} onClick={() => {
                     axios.post('http://localhost:3001/history/dislike', {
                       email: localStorage.getItem('chem'),
                       id: id,

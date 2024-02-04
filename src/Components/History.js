@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AccordionItem, AccordionBody, AccordionHeader, Accordion, Button, Card, CardBody, CardHeader, CardTitle, Form, FormGroup, Input, Label } from 'reactstrap';
-import { useLocation } from 'react-router-dom';
+import { VscSend } from "react-icons/vsc";
 import axios from 'axios';
 function History() {
   const [ replies, setReplies ] = useState([]);
@@ -10,6 +10,8 @@ function History() {
   const [ reload, setReload ] = useState(false);
   const [ email, setEmail ] = useState("");
   const [ disabled, setDisabled ] = useState(false);
+  const [ reply, setReply ] = useState("");
+  const [ viewInput, setViewInput ] = useState(false);
 
   const toggle = (e) => {
     if(e === open){
@@ -20,10 +22,42 @@ function History() {
     }
   }
 
-  const { state } = useLocation();
+  const renderAddInput = () => {
+    if(!disabled){
+      return(
+        <div className='row d-flex justify-content-center mt-2'>
+          <div className='col-10 col-md-10 d-flex align-items-center'>
+            <Input placeholder='Reply' onChange={(e) => setReply(e.target.value)} />
+          </div>
+          <div className='col-10 col-md-2 d-flex align-items-center'>
+            <Button onClick={() => {
+              axios.post('http://localhost:3001/reply', {
+              }).then((response) => {
+                if(response.data.message === 'Reply added'){
+                  setReload(!reload);
+                }
+                else{
+                  alert(response.data.message);
+                }
+              }).catch((eror) => {
+                alert(eror.message);
+              })
+            }} style={{backgroundColor:'white', border:'0px'}}>
+              <VscSend style={{color:'black'}} />
+            </Button>
+          </div>
+        </div>
+      );
+    }
+    else{
+      return(
+        <div></div>
+      );
+    }
+  }
 
   useEffect(() => {
-    let id = state.id
+    let id = localStorage.getItem('chrepid');
     setEmail(localStorage.getItem('chem'));
     setId(id);
     axios.get('http://localhost:3001/history', {
@@ -49,7 +83,11 @@ function History() {
   const renderReplies = () => {
     if(replies.length === 0){
       return(
-        <div></div>
+        <div className='row d-flex justify-content-center mt-5'>
+          <div className='col-12 d-flex align-items-center'>
+            <h4>No added history</h4>
+          </div>
+        </div>
       );
     }
     else
@@ -58,7 +96,7 @@ function History() {
       return replies.map((e, key) => {
         i = i + 1;
         return(
-          <AccordionItem key={key}>
+          <AccordionItem className='col-12' key={key}>
             <AccordionHeader targetId={i}>{e.email}</AccordionHeader>
             <AccordionBody accordionId={i}>
               <div className='row d-flex justify-content-center'>
@@ -113,9 +151,14 @@ function History() {
   
   return (
     <div className='container'>
-      <div className='row d-flex justify-content-center'>
+      <div className='row d-flex justify-content-center mt-5'>
+        <div className='col-12 d-flex align-items-center'>
+          <h2>Working History</h2>
+        </div>
+      </div>
+      <div className='row d-flex justify-content-left mt-5'>
         <div className='col-12 col-md-8 d-flex align-items-center'>
-          <Button onClick={() => {
+          <Button className='btn btn-danger' onClick={() => {
             axios.post('http://localhost:3001/reply/join', {
               email: email
             }).then((response) => {
@@ -125,15 +168,14 @@ function History() {
             }).catch((eror) => {
               alert(eror.message);
             })
-          }}>Join</Button>
+          }}>Join History</Button>
         </div>
       </div>
-        <div className='row d-flex justify-content-center'>
-          <div className='col-12 d-flex align-items-center'>
-            <Accordion open={open} toggle={toggle}>
-              {renderReplies()}
-            </Accordion>
-          </div>
+      {renderAddInput()}
+      <div className='row d-flex justify-content-center'>
+        <Accordion className='col-12 d-flex align-items-center' open={open} toggle={toggle}>
+          {renderReplies()}
+        </Accordion>
         </div>
     </div>
   )

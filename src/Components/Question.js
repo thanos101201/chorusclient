@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Accordion, AccordionBody, AccordionHeader, AccordionItem, Button, Card, CardBody, CardHeader, CardTitle, Form, FormGroup, Input, Label } from 'reactstrap';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
+import User from './User';
 
 function Question(props) {
 
@@ -48,11 +49,12 @@ function Question(props) {
   }
 
   const renderCheckButton = (email, id) => {
-    if(email === localStorage.getItem('chem')){
+    if(email !== localStorage.getItem('chem')){
       return(
         <Button className='btn btn-success' onClick={() => {
           setId(id);
-          handlePush();
+          localStorage.setItem('chrepid', id);
+          window.open("http://localhost:3000", "_self");
         }}>Reply</Button>
       );
     }
@@ -84,7 +86,7 @@ function Question(props) {
     if(question.length === 0){
       return(
         <div className='row d-flex justify-content-center mt-5'>
-          <div className='col-10 col-md-8 d-flex align-items-center'>
+          <div className='col-12 d-flex align-items-center'>
             <h3>No Questions right now</h3>
           </div>
         </div>
@@ -95,7 +97,7 @@ function Question(props) {
       return question.map((e, key) => {
         i = i + 1;
         return(
-          <AccordionItem>
+          <AccordionItem className='col-12' key={key}>
             <AccordionHeader targetId={`${i}`}>
               <h4>{e.title}</h4>
             </AccordionHeader>
@@ -124,15 +126,12 @@ function Question(props) {
                   <h6>{e.description}</h6>
                 </div>
               </div>
+              <div className='row d-flex justify-content-center'>
+                <div className='col-10 col-md-5 d-flex align-items-center'>
+                  {renderCheckButton(e.email, e._id)}
+                </div>
+              </div>
             </AccordionBody>
-            <div className='row d-flex justify-content-center'>
-              <div className='col-10 col-md-8 d-flex align-items-center'>
-                <h5>{e.title}</h5>
-              </div>
-              <div className='col-10 col-md-8 d-flex align-items-center'>
-                {renderCheckButton(e.email)}
-              </div>
-            </div>
           </AccordionItem>
         );
       })
@@ -193,7 +192,7 @@ function Question(props) {
                             </Label>
                           </div>
                           <div className='col-10 col-md-7 d-flex align-items-center'>
-                            <Input placeholder='Enter your password' type='password' onChange={(e) => setDescription(e.target.value)} />
+                            <Input placeholder='Enter your password' onChange={(e) => setDescription(e.target.value)} />
                           </div>
                         </div>
                       </FormGroup>
@@ -228,6 +227,7 @@ function Question(props) {
   }, [renderAdd]);
   return (
     <div className='container'>
+      <User />
       <div className='row d-flex justify-content-center mt-5'>
         <div className='col-10 col-md-8 d-flex align-items-center'></div>
         <div className='col-10 col-md-4 d-flex align-items-center'>
@@ -244,12 +244,10 @@ function Question(props) {
         </div>
         <div className='col-10 col-md-4 d-flex align-items-center'></div>
       </div>
-      <div className='row d-flex justify-content-center'>
-        <div className='col-10 d-flex align-items-center'>
-          <Accordion>
+      <div className='row d-flex justify-content-center mt-2'>
+          <Accordion className='col-12 d-flex align-items-center' toggle={toggle} open={queId}>
             {renderQuestion()}
           </Accordion>
-        </div>
       </div>
     </div>
   )

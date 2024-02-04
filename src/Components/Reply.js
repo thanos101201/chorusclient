@@ -3,6 +3,8 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AccordionItem, AccordionBody, AccordionHeader, Accordion, Button, Card, CardBody, CardHeader, CardTitle, Form, FormGroup, Input, Label } from 'reactstrap';
 import { useLocation } from 'react-router-dom';
+import { VscSend } from "react-icons/vsc";
+import { AiOutlineLike, AiOutlineDislike, AiTwotoneDislike, AiTwotoneLike } from "react-icons/ai";
 
 function Reply(props) {
   const [ replies, setReplies ] = useState([]);
@@ -11,6 +13,8 @@ function Reply(props) {
   const [ reload, setReload ] = useState(false);
   const [ disabled, setDisabled ] = useState(false);
   const [ email, setEmail ] = useState("");
+  const [ reply, setReply ] = useState("");
+
 
   const toggle = (e) => {
     if(e === open){
@@ -21,22 +25,78 @@ function Reply(props) {
     }
   }
 
+  const renderLikeButton = (condition) => {
+    if(condition){
+      return(
+        <Button style={{backgroundColor:'white', border:'0px'}} onClick={() => {
+          axios.post('http://localhost:3001/reply/like', {
+
+          }).then((response) => {
+            if(response.data.message === 'liked'){
+            }
+            else{
+              alert(response.data.message);
+            }
+          }).catch((eror) => {
+            alert(eror.message);
+          })
+        }}>
+          <AiOutlineLike style={{color:'black'}} />
+        </Button>
+      );
+    }
+    else{
+      return(
+        <Button style={{backgroundColor:'white', border:'0px'}}>
+          <AiTwotoneLike  style={{color:'black'}}/>
+        </Button>
+      );
+    }
+  }
+
+  const renderDislikeButton = (condition) => {
+    if(condition){
+      return(
+        <Button style={{backgroundColor:'white', border:'0px'}} onClick={() => {
+          axios.post('http://localhost:3001/reply/dislike', {
+
+          }).then((response) => {
+            if(response.data.message === 'disliked'){
+            }
+            else{
+              alert(response.data.message);
+            }
+          }).catch((eror) => {
+            alert(eror.message);
+          })
+        }}>
+          <AiOutlineDislike style={{color:'black'}} />
+        </Button>
+      );
+    }
+    else{
+      return(
+        <Button style={{backgroundColor:'white', border:'0px'}}>
+          <AiTwotoneDislike  style={{color:'black'}}/>
+        </Button>
+      );
+    }
+  }
+
   const { state } = useLocation();
 
   useEffect(() => {
-    if(state === null){
-      window.open("http://localhost:3000/question", "_self");
-    }
-    let id = state.id
+    
+    let id = localStorage.getItem('chrepid');
 
     setEmail(localStorage.getItem('chem'));
     setId(id);
     axios.get('http://localhost:3001/reply', {
       headers: {
-        questionId : id
+        id : id
       }
     }).then((response) => {
-      if(response.data.message === 'Replies are here'){
+      if(response.data.message === 'Reply is here'){
         setReplies(response.data.data);
       }
     }).catch((eror) => {
@@ -65,7 +125,7 @@ function Reply(props) {
   }, []);
 
   const checkDisabled = (ar) => {
-    if(ar.indexOf(localStorage.get('chem')) !== -1){
+    if(ar.indexOf(localStorage.getItem('chem')) !== -1){
       return true;
     }
     return false;
@@ -73,18 +133,24 @@ function Reply(props) {
 
 
   const renderReplies = () => {
+    
     if(replies.length === 0){
       return(
-        <div></div>
+        <div className='row d-flex justify-content-center mt-5'>
+          <div className='col-12 d-flex align-items-center'>
+            <h4>No replies</h4>
+          </div>
+        </div>
       );
     }
     else
     {
       let i = 0;
+      console.log('hello in replies');
       return replies.map((e, key) => {
         i = i + 1;
         return(
-          <AccordionItem key={key}>
+          <AccordionItem className='col-12' key={key}>
             <AccordionHeader targetId={i}>{e.email}</AccordionHeader>
             <AccordionBody accordionId={i}>
               <div className='row d-flex justify-content-center'>
@@ -134,11 +200,53 @@ function Reply(props) {
     }
   }
 
+  const renderAddInput = () => {
+    if(!disabled){
+      return(
+        <div className='row d-flex justify-content-center mt-2'>
+          <div className='col-10 col-md-10 d-flex align-items-center'>
+            <Input placeholder='Reply' onChange={(e) => setReply(e.target.value)} />
+          </div>
+          <div className='col-10 col-md-2 d-flex align-items-center'>
+            <Button onClick={() => {
+              axios.post('http://localhost:3001/reply', {
+                email: localStorage.getItem('chem'),
+                questionId: localStorage.getItem('chrepid'),
+                text: reply
+              }).then((response) => {
+                if(response.data.message === 'Reply added'){
+                  setReload(!reload);
+                }
+                else{
+                  alert(response.data.message);
+                }
+              }).catch((eror) => {
+                alert(eror.message);
+              })
+            }} style={{backgroundColor:'white', border:'0px'}}>
+              <VscSend style={{color:'black'}} />
+            </Button>
+          </div>
+        </div>
+      );
+    }
+    else{
+      return(
+        <div></div>
+      );
+    }
+  }
+
   return (
     <div className='container'>
-      <div className='row d-flex justify-content-center'>
+      <div className='row d-flex justify-content-center mt-5'>
+        <div className='col-12 d-flex align-items-center'>
+          <h2>Replies</h2>
+        </div>
+      </div>
+      <div className='row d-flex justify-content-left mt-5'>
         <div className='col-12 col-md-8 d-flex align-items-center'>
-          <Button disabled={disabled} onClick={() => {
+          <Button className='btn btn-success' disabled={disabled} onClick={() => {
             axios.post('http://localhost:3001/reply/join', {
               email: email
             }).then((response) => {
@@ -151,16 +259,13 @@ function Reply(props) {
             }).catch((eror) => {
               alert(eror.message);
             })
-          }}>Join</Button>
+          }}>Join Reply</Button>
         </div>
       </div>
-        <div className='row d-flex justify-content-center'>
-          <div className='col-12 d-flex align-items-center'>
-            <Accordion open={open} toggle={toggle}>
-              {renderReplies()}
-            </Accordion>
-          </div>
-        </div>
+      {renderAddInput()}
+        <Accordion className='row d-flex justify-content-center mt-3' open={open} toggle={toggle}>
+          {renderReplies()}
+        </Accordion>
     </div>
   )
 }

@@ -14,7 +14,9 @@ function Reply(props) {
   const [ disabled, setDisabled ] = useState(false);
   const [ email, setEmail ] = useState("");
   const [ reply, setReply ] = useState("");
-
+  const [ cond2, setCond2 ] = useState(true);
+  const [ cond3, setCond3 ] = useState(true);
+  
 
   const toggle = (e) => {
     if(e === open){
@@ -25,10 +27,16 @@ function Reply(props) {
     }
   }
 
-  const renderLikeButton = (condition) => {
+  
+  const renderLikeButton = (condition, str) => {
+    if(str === 'History'){
+      return(
+        <div></div>
+      );
+    }
     if(condition){
       return(
-        <Button style={{backgroundColor:'white', border:'0px'}} onClick={() => {
+        <Button disabled={cond2} style={{backgroundColor:'white', border:'0px'}} onClick={() => {
           axios.post('http://localhost:3001/reply/like', {
 
           }).then((response) => {
@@ -47,19 +55,23 @@ function Reply(props) {
     }
     else{
       return(
-        <Button style={{backgroundColor:'white', border:'0px'}}>
+        <Button disabled={cond2} style={{backgroundColor:'white', border:'0px'}}>
           <AiTwotoneLike  style={{color:'black'}}/>
         </Button>
       );
     }
   }
 
-  const renderDislikeButton = (condition) => {
+  const renderDislikeButton = (condition, str) => {
+    if(str === 'History'){
+      return(
+        <Button className='btn btn-success'>Add to History</Button>
+      );
+    }
     if(condition){
       return(
-        <Button style={{backgroundColor:'white', border:'0px'}} onClick={() => {
+        <Button disabled={!cond2 || !cond3} style={{backgroundColor:'white', border:'0px'}} onClick={() => {
           axios.post('http://localhost:3001/reply/dislike', {
-
           }).then((response) => {
             if(response.data.message === 'disliked'){
             }
@@ -76,7 +88,7 @@ function Reply(props) {
     }
     else{
       return(
-        <Button style={{backgroundColor:'white', border:'0px'}}>
+        <Button disabled={!cond2 || !cond3} style={{backgroundColor:'white', border:'0px'}}>
           <AiTwotoneDislike  style={{color:'black'}}/>
         </Button>
       );
@@ -124,6 +136,25 @@ function Reply(props) {
     })
   }, []);
 
+  useEffect(() => {
+    axios.get('http://localhost:3001/question', {
+      id: localStorage.getItem('chem')
+    }).then((response) => {
+      if(response.data.message === 'The question is here'){
+        if(response.data.data[0].historyUsers.indexOf(localStorage.getItem('chem')) !== -1){
+          setCond2(false);
+        }
+        if(response.data.data[0].replyUsers.indexOf(localStorage.getItem('chem')) === -1){
+          setCond3(false);
+        }
+      }
+      else{
+        alert(response.data.message);
+      }
+    }).catch((eror) => {
+      alert(eror.message);
+    })
+  }, [])
   const checkDisabled = (ar) => {
     if(ar.indexOf(localStorage.getItem('chem')) !== -1){
       return true;
@@ -159,8 +190,8 @@ function Reply(props) {
                 </div>
               </div>
               <div className='row d-flex justify-content-center'>
-                <div className='col-12 col-md-6 d-flex align-items-center'>
-                  <Button disabled={disabled || checkDisabled(e.upVotes)} onClick={() => {
+                <div className='col-12 col-md-4 d-flex align-items-center m-1'>
+                  {/* <Button className='btn btn-success' disabled={disabled || checkDisabled(e.upVotes)} onClick={() => {
                     axios.post('http://localhost:3001/reply/like', {
                       email: localStorage.getItem('chem'),
                       replyId : e._id
@@ -174,10 +205,11 @@ function Reply(props) {
                     }).catch((eror) => {
                       alert(eror.message);
                     })
-                  }}>Like</Button>
+                  }}>Like</Button> */}
+                  {renderLikeButton( e.upVotes.indexOf(localStorage.getItem("chem")) === -1, "")}
                 </div>
-                <div className='col-12 col-md-6 d-flex align-items-center'>
-                  <Button disabled={disabled || checkDisabled(e.downVotes)} onClick={() => {
+                <div className='col-12 col-md-4 d-flex align-items-center m-1'>
+                  {/* <Button className='btn btn-danger' disabled={disabled || checkDisabled(e.downVotes)} onClick={() => {
                     axios.post('http://localhost:3001/reply/dislike', {
                       email: localStorage.getItem('chem'),
                       replyId : e._id
@@ -190,7 +222,8 @@ function Reply(props) {
                     }).catch((eror) => {
                       alert(eror.message);
                     })
-                  }}>Dislike</Button>
+                  }}>Dislike</Button> */}
+                  {renderDislikeButton( e.downVotes.indexOf(localStorage.getItem("chem")) === -1, !cond2? "History": "")}
                 </div>
               </div>
             </AccordionBody>
@@ -201,6 +234,11 @@ function Reply(props) {
   }
 
   const renderAddInput = () => {
+    if(!cond2 || !cond3){
+      return(
+        <div></div>
+      );
+    }
     if(!disabled){
       return(
         <div className='row d-flex justify-content-center mt-2'>
@@ -246,7 +284,7 @@ function Reply(props) {
       </div>
       <div className='row d-flex justify-content-left mt-5'>
         <div className='col-12 col-md-8 d-flex align-items-center'>
-          <Button className='btn btn-success' disabled={disabled} onClick={() => {
+          <Button disabled={cond2} className='btn btn-success' onClick={() => {
             axios.post('http://localhost:3001/reply/join', {
               email: email
             }).then((response) => {

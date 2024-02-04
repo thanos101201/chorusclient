@@ -34,7 +34,7 @@ function User() {
         else{
             console.log(user);
             return(
-                <Card className='col-6 shadow-lg'>
+                <Card className='col-12 col-md-6 shadow-lg'>
                     <CardHeader>
                         <CardTitle>
                             <h3>User data</h3>
@@ -70,7 +70,7 @@ function User() {
                         <div className='row d-flex justify-content-center'>
                             <div className='col-10 col-md-4 d-flex align-items-center'>
                                 <Button className='btn btn-success m-1 shadow-lg' onClick={() => {
-                                    window.open("http://localhost:3000/questions", "_self");
+                                    window.open("http://localhost:3000/question", "_self");
                                 }}>
                                     Questions
                                 </Button>

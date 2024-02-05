@@ -17,10 +17,10 @@ function Sign() {
         window.open("http://localhost:3000/", "_self");
       }
       else{
-        alert(response.data.message);
+        // { alertresponse.data.message);
       }
     }).catch((eror) => {
-      alert(eror.message);
+      // { alerteror.message);
     })
   }
 

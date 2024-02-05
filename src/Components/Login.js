@@ -17,7 +17,7 @@ function Login() {
         window.open("http://localhost:3000/", "_self");
       }
     }).catch((eror) => {
-      alert(eror.message);
+      // { alerteror.message);
     })
   }
 

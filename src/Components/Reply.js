@@ -45,10 +45,10 @@ function Reply(props) {
             if(response.data.message === 'liked'){
             }
             else{
-              alert(response.data.message);
+              // { alertresponse.data.message);
             }
           }).catch((eror) => {
-            alert(eror.message);
+            // { alerteror.message);
           })
         }}>
           <AiOutlineLike style={{color:'black'}} />
@@ -80,10 +80,10 @@ function Reply(props) {
             if(response.data.message === 'disliked'){
             }
             else{
-              alert(response.data.message);
+              // { alertresponse.data.message);
             }
           }).catch((eror) => {
-            alert(eror.message);
+            // { alerteror.message);
           })
         }}>
           <AiOutlineDislike style={{color:'black'}} />
@@ -119,7 +119,7 @@ function Reply(props) {
         }
       }
     }).catch((eror) => {
-      alert(eror.message);
+      // { alerteror.message);
     });
   }, [reload]);
 
@@ -139,7 +139,7 @@ function Reply(props) {
         }
       }
     }).catch((eror) => {
-      alert(eror.message);
+      // { alerteror.message);
     })
   }, []);
 
@@ -160,10 +160,10 @@ function Reply(props) {
         }
       }
       else{
-        alert(response.data.message);
+        // { alertresponse.data.message);
       }
     }).catch((eror) => {
-      alert(eror.message);
+      // { alerteror.message);
     })
   }, [])
   const checkDisabled = (ar) => {
@@ -268,10 +268,10 @@ function Reply(props) {
                   setReload(!reload);
                 }
                 else{
-                  alert(response.data.message);
+                  // { alertresponse.data.message);
                 }
               }).catch((eror) => {
-                alert(eror.message);
+                // { alerteror.message);
               })
             }} style={{backgroundColor:'white', border:'0px'}}>
               <VscSend style={{color:'black'}} />
@@ -304,10 +304,10 @@ function Reply(props) {
                 setReload(!reload);
               }
               else{
-                alert(response.data.message);
+                // { alertresponse.data.message);
               }
             }).catch((eror) => {
-              alert(eror.message);
+              // { alerteror.message);
             })
           }}>Join Reply</Button>
         </div>

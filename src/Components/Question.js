@@ -14,6 +14,8 @@ function Question(props) {
   const [ description, setDescription ] = useState("");
   const [ reload, setReload ] = useState(false);
   const [ queId, setQueId ] = useState("");
+  const [ replyDescription, setReplyDescription ] = useState("");
+  const [ reload2, setReload2 ] = useState(false);
 
   const toggle = (e) => {
     if(e === queId){
@@ -31,11 +33,13 @@ function Question(props) {
         console.log('fetched');
       }
       else{
-        alert(response.data.message);
+        // { alert(response.data.message);
       }
     }).catch((eror) => {
-      if(eror.response.status !== 404)
-      alert(eror.message);
+      if(eror.response.status !== 404){
+        
+      }
+      // { alert(eror.message);
     });
   }, [reload]);
 
@@ -54,7 +58,7 @@ function Question(props) {
         <Button className='btn btn-success' onClick={() => {
           setId(id);
           localStorage.setItem('chrepid', id);
-          window.open("http://localhost:3000", "_self");
+          window.open("http://localhost:3000/question", "_self");
         }}>Reply</Button>
       );
     }
@@ -64,14 +68,16 @@ function Question(props) {
           axios.post('http://localhost:3001/question/aggreement', {
             questionId: id
           }).then((response) => {
-            if(response.data.message === 'Reply is here'){
-              setReload(!reload);
+            if(response.data.message === 'Agreement acheived'){
+              console.log(response.data.data);
+              setReplyDescription(response.data.data.text);
+              setReload2(!reload);
             }
             else{
-              alert(response.data.message);
+              // { alert(response.data.message);
             }
           }).catch((eror) => {
-            alert(eror.message);
+            // { alert(eror.message);
           });
         }}>
           Check Reply
@@ -80,6 +86,21 @@ function Question(props) {
     }
   }
 
+  useEffect(() => {
+  }, [reload2]);
+
+  const renderReplyDescription = () => {
+    if(replyDescription !== ""){
+      return(
+        <h6>{replyDescription}</h6>
+      );
+    }
+    else{
+      return(
+        <h6></h6>
+      );
+    }
+  }
   const renderQuestion = () => {
     if(question.length === 0){
       return(
@@ -121,7 +142,7 @@ function Question(props) {
                   <h6>Reply :</h6>
                 </div>
                 <div className='col-10 col-md-7 d-flex align-items-center'>
-                  <h6>{e.description}</h6>
+                  {renderReplyDescription()}
                 </div>
               </div>
               <div className='row d-flex justify-content-center'>
@@ -147,10 +168,10 @@ function Question(props) {
         setReload(!reload);
       }
       else{
-        alert(response.data.message);
+        // { alert(response.data.message);
       }
     }).catch((eror) => {
-      alert(eror.message);
+      // { alert(eror.message);
     });
   }
 

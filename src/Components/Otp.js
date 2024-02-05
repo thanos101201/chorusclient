@@ -44,10 +44,10 @@ function Otp() {
           setText("Verify Otp");
         }
         else{
-          alert(response.data.message);
+          // { // { alert(response.data.message);
         }
       }).catch((eror) => {
-        alert(eror.message);
+        // { // { alert(eror.message);
       });
     }
     else{
@@ -60,10 +60,10 @@ function Otp() {
           window.open("http://localhost:3000/sign", "_self");
         }
         else{
-          alert('Invalid otp');
+          // { // { // { alert('Invalid otp');
         }
       }).catch((eror) => {
-        alert(eror.message);
+        // { // { alert(eror.message);
       })
     }
   }

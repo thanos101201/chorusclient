@@ -32,10 +32,10 @@ function History() {
         }
       }
       else{
-        alert(response.data.message);
+        // { alertresponse.data.message);
       }
     }).catch((eror) => {
-      alert(eror.message);
+      // { alerteror.message);
     })
   }, []);
 
@@ -58,10 +58,10 @@ function History() {
             if(response.data.message === 'liked'){
             }
             else{
-              alert(response.data.message);
+              // { alertresponse.data.message);
             }
           }).catch((eror) => {
-            alert(eror.message);
+            // { alerteror.message);
           })
         }}>
           <AiOutlineLike style={{color:'black'}} />
@@ -91,10 +91,10 @@ function History() {
             if(response.data.message === 'disliked'){
             }
             else{
-              alert(response.data.message);
+              // { alertresponse.data.message);
             }
           }).catch((eror) => {
-            alert(eror.message);
+            // { alerteror.message);
           })
         }}>
           <AiOutlineDislike style={{color:'black'}} />
@@ -130,10 +130,10 @@ function History() {
                   setReload(!reload);
                 }
                 else{
-                  alert(response.data.message);
+                  // { alertresponse.data.message);
                 }
               }).catch((eror) => {
-                alert(eror.message);
+                // { alerteror.message);
               })
             }} style={{backgroundColor:'white', border:'0px'}}>
               <VscSend style={{color:'black'}} />
@@ -162,7 +162,7 @@ function History() {
         setReplies(response.data.data);
       }
     }).catch((eror) => {
-      alert(eror.message);
+      // { alerteror.message);
     });
   }, [reload]);
 
@@ -178,10 +178,10 @@ function History() {
         }
       }
       else{
-        alert(response.data.message);
+        // { alertresponse.data.message);
       }
     }).catch((eror) => {
-      alert(eror.message);
+      // { alerteror.message);
     })
   }, []);
 
@@ -218,41 +218,9 @@ function History() {
               </div>
               <div className='row d-flex justify-content-center'>
                 <div className='col-4 d-flex align-items-center m-1'>
-                  {/* <Button disabled={disabled || checkDisabled(e.upVotes)} onClick={() => {
-                    axios.post('http://localhost:3001/history/like', {
-                      email: localStorage.getItem('chem'),
-                      id : id,
-                      index: i-1
-                    }).then((response) => {
-                      if(response.data.message === 'liked'){
-                        setReload(!reload);
-                      }
-                      else{
-                        alert(response.data.message);
-                      }
-                    }).catch((eror) => {
-                      alert(eror.message);
-                    })
-                  }}>Like</Button> */}
                   {renderLikeButton( e.upVotes.indexOf(localStorage.getItem("chem")) === -1, "")  }
                 </div>
                 <div className='col-4 d-flex align-items-center m-1'>
-                  {/* <Button disabled={disabled || checkDisabled(e.downVotes)} onClick={() => {
-                    axios.post('http://localhost:3001/history/dislike', {
-                      email: localStorage.getItem('chem'),
-                      id: id,
-                      index : i-1
-                    }).then((response) => {
-                      if(response.data.message === 'disliked'){
-                        setReload(!reload);
-                      }
-                      else{
-                        alert(response.data.message);
-                      }
-                    }).catch((eror) => {
-                      alert(eror.message);
-                    })
-                  }}>Dislike</Button> */}
                   {renderDislikeButton( e.downVotes.indexOf(localStorage.getItem("chem")) === -1,"")}
                 </div>
               </div>
@@ -280,7 +248,7 @@ function History() {
                 setReload(!reload);
               }
             }).catch((eror) => {
-              alert(eror.message);
+              // { alerteror.message);
             })
           }}>Join History</Button>
         </div>

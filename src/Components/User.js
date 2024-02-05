@@ -17,10 +17,10 @@ function User() {
                 console.log(user);
             }
             else{
-                alert(response.data.message);
+                // { alertresponse.data.message);
             }
         }).catch((eror) => {
-            alert(eror.message);
+            // { alerteror.message);
         });
     }, []);
 

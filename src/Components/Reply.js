@@ -16,6 +16,7 @@ function Reply(props) {
   const [ reply, setReply ] = useState("");
   const [ cond2, setCond2 ] = useState(true);
   const [ cond3, setCond3 ] = useState(true);
+  const [cond1, setCond1 ] = useState(false);
   
 
   const toggle = (e) => {
@@ -28,7 +29,7 @@ function Reply(props) {
   }
 
   
-  const renderLikeButton = (condition, str) => {
+  const renderLikeButton = (condition, str, id) => {
     if(str === 'History'){
       return(
         <div></div>
@@ -36,9 +37,10 @@ function Reply(props) {
     }
     if(condition){
       return(
-        <Button disabled={cond2} style={{backgroundColor:'white', border:'0px'}} onClick={() => {
+        <Button disabled={cond3} style={{backgroundColor:'white', border:'0px'}} onClick={() => {
           axios.post('http://localhost:3001/reply/like', {
-
+            email: localStorage.getItem('chem'),
+            replyId: id
           }).then((response) => {
             if(response.data.message === 'liked'){
             }
@@ -55,14 +57,14 @@ function Reply(props) {
     }
     else{
       return(
-        <Button disabled={cond2} style={{backgroundColor:'white', border:'0px'}}>
+        <Button disabled={cond3} style={{backgroundColor:'white', border:'0px'}}>
           <AiTwotoneLike  style={{color:'black'}}/>
         </Button>
       );
     }
   }
 
-  const renderDislikeButton = (condition, str) => {
+  const renderDislikeButton = (condition, str, id) => {
     if(str === 'History'){
       return(
         <Button className='btn btn-success'>Add to History</Button>
@@ -70,8 +72,10 @@ function Reply(props) {
     }
     if(condition){
       return(
-        <Button disabled={!cond2 || !cond3} style={{backgroundColor:'white', border:'0px'}} onClick={() => {
+        <Button disabled={cond3} style={{backgroundColor:'white', border:'0px'}} onClick={() => {
           axios.post('http://localhost:3001/reply/dislike', {
+            email: localStorage.getItem('chem'),
+            replyId: id
           }).then((response) => {
             if(response.data.message === 'disliked'){
             }
@@ -88,7 +92,7 @@ function Reply(props) {
     }
     else{
       return(
-        <Button disabled={!cond2 || !cond3} style={{backgroundColor:'white', border:'0px'}}>
+        <Button disabled={cond3} style={{backgroundColor:'white', border:'0px'}}>
           <AiTwotoneDislike  style={{color:'black'}}/>
         </Button>
       );
@@ -110,6 +114,9 @@ function Reply(props) {
     }).then((response) => {
       if(response.data.message === 'Reply is here'){
         setReplies(response.data.data);
+        if(replies.data.data.length === 0){
+          setCond1(true);
+        }
       }
     }).catch((eror) => {
       alert(eror.message);
@@ -138,13 +145,17 @@ function Reply(props) {
 
   useEffect(() => {
     axios.get('http://localhost:3001/question', {
-      id: localStorage.getItem('chem')
+      headers: {
+        id: localStorage.getItem('chrepid')
+      }
     }).then((response) => {
+      // console.log(response.data.data[0].replyUsers.indexOf(localStorage.getItem('chem')) !== -1);
+      // console.log(response.data.data[0].historyUsers.indexOf(localStorage.getItem('chem')) === -1);
       if(response.data.message === 'The question is here'){
-        if(response.data.data[0].historyUsers.indexOf(localStorage.getItem('chem')) !== -1){
+        if(response.data.data[0].replyUsers.indexOf(localStorage.getItem('chem')) === -1 && response.data.data[0].historyUsers.indexOf(localStorage.getItem('chem')) === -1){
           setCond2(false);
         }
-        if(response.data.data[0].replyUsers.indexOf(localStorage.getItem('chem')) === -1){
+        if(response.data.data[0].replyUsers.indexOf(localStorage.getItem('chem')) !== -1 && response.data.data[0].historyUsers.indexOf(localStorage.getItem('chem')) === -1){
           setCond3(false);
         }
       }
@@ -177,7 +188,6 @@ function Reply(props) {
     else
     {
       let i = 0;
-      console.log('hello in replies');
       return replies.map((e, key) => {
         i = i + 1;
         return(
@@ -186,11 +196,11 @@ function Reply(props) {
             <AccordionBody accordionId={i}>
               <div className='row d-flex justify-content-center'>
                 <div className='col-12 d-flex align-items-center'>
-                  <p>{e.description}</p>
+                  <p>{e.text}</p>
                 </div>
               </div>
               <div className='row d-flex justify-content-center'>
-                <div className='col-12 col-md-4 d-flex align-items-center m-1'>
+                <div className='col-4 d-flex align-items-center m-1'>
                   {/* <Button className='btn btn-success' disabled={disabled || checkDisabled(e.upVotes)} onClick={() => {
                     axios.post('http://localhost:3001/reply/like', {
                       email: localStorage.getItem('chem'),
@@ -206,9 +216,9 @@ function Reply(props) {
                       alert(eror.message);
                     })
                   }}>Like</Button> */}
-                  {renderLikeButton( e.upVotes.indexOf(localStorage.getItem("chem")) === -1, "")}
+                  {renderLikeButton( e.upVotes.indexOf(localStorage.getItem("chem")) === -1 || e.email === localStorage.getItem('chem'), cond3 ? "History" :"", e._id)}
                 </div>
-                <div className='col-12 col-md-4 d-flex align-items-center m-1'>
+                <div className='col-4 d-flex align-items-center m-1'>
                   {/* <Button className='btn btn-danger' disabled={disabled || checkDisabled(e.downVotes)} onClick={() => {
                     axios.post('http://localhost:3001/reply/dislike', {
                       email: localStorage.getItem('chem'),
@@ -223,7 +233,7 @@ function Reply(props) {
                       alert(eror.message);
                     })
                   }}>Dislike</Button> */}
-                  {renderDislikeButton( e.downVotes.indexOf(localStorage.getItem("chem")) === -1, !cond2? "History": "")}
+                  {renderDislikeButton( e.downVotes.indexOf(localStorage.getItem("chem")) === -1, cond3? "History": "", e._id)}
                 </div>
               </div>
             </AccordionBody>
@@ -234,7 +244,9 @@ function Reply(props) {
   }
 
   const renderAddInput = () => {
-    if(!cond2 || !cond3){
+    if(cond3){
+      console.log(cond2);
+      console.log(cond3);
       return(
         <div></div>
       );
@@ -284,7 +296,7 @@ function Reply(props) {
       </div>
       <div className='row d-flex justify-content-left mt-5'>
         <div className='col-12 col-md-8 d-flex align-items-center'>
-          <Button disabled={cond2} className='btn btn-success' onClick={() => {
+          <Button disabled={cond1 || cond2} className='btn btn-success' onClick={() => {
             axios.post('http://localhost:3001/reply/join', {
               email: email
             }).then((response) => {
@@ -301,7 +313,7 @@ function Reply(props) {
         </div>
       </div>
       {renderAddInput()}
-        <Accordion className='row d-flex justify-content-center mt-3' open={open} toggle={toggle}>
+        <Accordion className='row d-flex justify-content-center mt-3 mb-5' open={open} toggle={toggle}>
           {renderReplies()}
         </Accordion>
     </div>

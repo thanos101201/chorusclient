@@ -61,10 +61,8 @@ function Question(props) {
     else{
       return(
         <Button className='btn btn-danger' onClick={() => {
-          axios.get('http://localhost:3001/', {
-            headers: {
-              id: id
-            }
+          axios.post('http://localhost:3001/question/aggreement', {
+            questionId: id
           }).then((response) => {
             if(response.data.message === 'Reply is here'){
               setReload(!reload);

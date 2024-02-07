@@ -14,7 +14,7 @@ function Sign() {
       password: password
     }).then((response) => {
       if(response.data.message === 'User added'){
-        window.open("http://localhost:3000/", "_self");
+        window.open("http://localhost:3000/question", "_self");
       }
       else{
         // { alertresponse.data.message);
@@ -72,7 +72,7 @@ function Sign() {
                         </div>
                         <div className='col-10 col-md-6 d-flex align-items-center'>
                           <Button className='btn btn-danger m-1' onClick={() => {
-                            window.open("http://localhost:3000/login", "_self");
+                            window.open("http://localhost:3000/", "_self");
                           }}>Login</Button>
                         </div>
                       </div>

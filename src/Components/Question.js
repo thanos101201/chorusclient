@@ -27,6 +27,10 @@ function Question(props) {
   }
 
   useEffect(() => {
+    if(localStorage.getItem('chem') === undefined){
+      console.log(typeof(localStorage.getItem('chem')));
+      window.open("http://localhost:3000/", "_self");
+    }
     axios.get('http://localhost:3001/question/all').then((response) => {
       if(response.data.message === 'Questions are here'){
         setQuestion(response.data.data);
@@ -37,7 +41,7 @@ function Question(props) {
       }
     }).catch((eror) => {
       if(eror.response.status !== 404){
-        
+
       }
       // { alert(eror.message);
     });
@@ -58,7 +62,7 @@ function Question(props) {
         <Button className='btn btn-success' onClick={() => {
           setId(id);
           localStorage.setItem('chrepid', id);
-          window.open("http://localhost:3000/question", "_self");
+          window.open("http://localhost:3000/home", "_self");
         }}>Reply</Button>
       );
     }
@@ -116,7 +120,7 @@ function Question(props) {
       return question.map((e, key) => {
         i = i + 1;
         return(
-          <AccordionItem className='col-12' key={key}>
+          <AccordionItem className='row d-flex justify-content-center' key={key}>
             <AccordionHeader targetId={`${i}`}>
               <h4>{e.title}</h4>
             </AccordionHeader>
@@ -263,11 +267,9 @@ function Question(props) {
         </div>
         <div className='col-10 col-md-4 d-flex align-items-center'></div>
       </div>
-      <div className='row d-flex justify-content-center mt-2'>
-          <Accordion className='col-12 d-flex align-items-center' toggle={toggle} open={queId}>
-            {renderQuestion()}
-          </Accordion>
-      </div>
+      <Accordion className='row d-flex justify-content-center mt-2' toggle={toggle} open={queId}>
+        {renderQuestion()}
+      </Accordion>
     </div>
   )
 }

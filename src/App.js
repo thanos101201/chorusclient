@@ -11,11 +11,11 @@ import Otp from './Components/Otp';
 function App() {
   return (
     <Routes>
-      <Route exact path='/' element={<Question />} />
+      <Route exact path='/' element={<Login />} />
       <Route path='/history' element={<History />} />
-      <Route path='/login' element={<Login />} />
+      <Route path='/question' element={<Question />} />
       <Route path='/sign' element={<Sign />} />
-      <Route path='/question' element={<Home />} />
+      <Route path='/home' element={<Home />} />
       <Route path='/otp' element={<Otp />} />
     </Routes>
   );

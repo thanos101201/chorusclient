@@ -7,6 +7,9 @@ function User() {
     const [ user, setUser ] = useState({});
 
     useEffect(() => {
+        if(localStorage.getItem('chem') === undefined){
+            window.open("http://localhost:3000/", "_self");
+        }
         axios.get('http://localhost:3001/user', {
             headers: {
                 email: localStorage.getItem('chem')
@@ -78,7 +81,7 @@ function User() {
                             <div className='col-10 col-md-4 d-flex align-items-center m-1'>
                                 <Button onClick={() => {
                                     localStorage.setItem('chem', "undefined");
-                                    window.open("http://localhost:3000/login", "_self");
+                                    window.open("http://localhost:3000/", "_self");
                                 }} className='btn btn-danger shadow-lg'>
                                     Log Out
                                 </Button>

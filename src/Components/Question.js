@@ -19,9 +19,11 @@ function Question(props) {
 
   const toggle = (e) => {
     if(e === queId){
+      setReplyDescription("");
       setQueId("");
     }
     else{
+      setReplyDescription("");
       setQueId(e);
     }
   }

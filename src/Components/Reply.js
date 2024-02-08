@@ -42,7 +42,8 @@ function Reply(props) {
             email: localStorage.getItem('chem'),
             replyId: id
           }).then((response) => {
-            if(response.data.message === 'liked'){
+            if(response.data.message === 'Reply liked'){
+              setReload(!reload)
             }
             else{
               // { alertresponse.data.message);
@@ -78,7 +79,7 @@ function Reply(props) {
               setReload(!reload);
             }
           }).catch((eror) => {
-            alert(eror.message);
+            // alert(eror.message);
           })
         }} >Add to History</Button>
       );
@@ -90,7 +91,8 @@ function Reply(props) {
             email: localStorage.getItem('chem'),
             replyId: id
           }).then((response) => {
-            if(response.data.message === 'disliked'){
+            if(response.data.message === 'Reply disliked'){
+              setReload(!reload);
             }
             else{
               // { alertresponse.data.message);
@@ -236,7 +238,7 @@ function Reply(props) {
                       alert(eror.message);
                     })
                   }}>Like</Button> */}
-                  {renderLikeButton( e.upVotes.indexOf(localStorage.getItem("chem")) === -1 || e.email === localStorage.getItem('chem'), cond3 ? "History" :"", e._id, e.text)}
+                  {renderLikeButton( e.upVotes.indexOf(localStorage.getItem("chem")) === -1, cond3 ? "History" :"", e._id, e.text)}
                 </div>
                 <div className='col-4 d-flex align-items-center m-1'>
                   {/* <Button className='btn btn-danger' disabled={disabled || checkDisabled(e.downVotes)} onClick={() => {

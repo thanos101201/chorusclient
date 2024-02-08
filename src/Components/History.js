@@ -88,6 +88,11 @@ function History() {
   }
 
   const renderDislikeButton = (condition, email, id) => {
+    if(cond3){
+      return(
+        <div></div>
+        )
+    }
     if(condition){
       return(
         <Button disabled={cond3} style={{backgroundColor:'white', border:'0px'}} onClick={() => {
@@ -132,7 +137,10 @@ function History() {
           </div>
           <div className='col-10 col-md-2 d-flex align-items-center'>
             <Button onClick={() => {
-              axios.post('http://localhost:3001/reply', {
+              axios.post('http://localhost:3001/history/add', {
+                questionId: localStorage.getItem('chrepid'),
+                email: localStorage.getItem('chem'),
+                replyText: reply
               }).then((response) => {
                 if(response.data.message === 'Reply added'){
                   setReload(!reload);
@@ -214,6 +222,7 @@ function History() {
     else
     {
       let i = 0;
+      console.log(replies.length);
       return replies.map((e, key) => {
         i = i + 1;
         return(
@@ -222,7 +231,7 @@ function History() {
             <AccordionBody accordionId={i}>
               <div className='row d-flex justify-content-center'>
                 <div className='col-12 d-flex align-items-center'>
-                  <p>{e.description}</p>
+                  <p>{e.replyText}</p>
                 </div>
               </div>
               <div className='row d-flex justify-content-center'>
@@ -264,11 +273,9 @@ function History() {
         </div>
       </div>
       {renderAddInput()}
-      <div className='row d-flex justify-content-center'>
-        <Accordion className='col-12 d-flex align-items-center mb-3' open={open} toggle={toggle}>
-          {renderReplies()}
-        </Accordion>
-        </div>
+      <Accordion className='row d-flex justify-content-center mt-3 mb-3' open={open} toggle={toggle}>
+        {renderReplies()}
+      </Accordion>
     </div>
   )
 }

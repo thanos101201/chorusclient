@@ -31,9 +31,9 @@ function Question(props) {
   useEffect(() => {
     if(localStorage.getItem('chem') === undefined){
       console.log(typeof(localStorage.getItem('chem')));
-      window.open("http://localhost:3000/", "_self");
+      window.open("https://chorusclient.vercel.app/", "_self");
     }
-    axios.get('http://localhost:3001/question/all').then((response) => {
+    axios.get('https://chorusserver.vercel.app/question/all').then((response) => {
       if(response.data.message === 'Questions are here'){
         setQuestion(response.data.data);
         console.log('fetched');
@@ -64,14 +64,14 @@ function Question(props) {
         <Button className='btn btn-success' onClick={() => {
           setId(id);
           localStorage.setItem('chrepid', id);
-          window.open("http://localhost:3000/home", "_self");
+          window.open("https://chorusclient.vercel.app/home", "_self");
         }}>Reply</Button>
       );
     }
     else{
       return(
         <Button className='btn btn-danger' onClick={() => {
-          axios.post('http://localhost:3001/question/aggreement', {
+          axios.post('https://chorusserver.vercel.app/question/aggreement', {
             questionId: id
           }).then((response) => {
             if(response.data.message === 'Agreement acheived'){
@@ -164,7 +164,7 @@ function Question(props) {
   }
 
   const handleAddQuesion = () => {
-    axios.post('http://localhost:3001/question', {
+    axios.post('https://chorusserver.vercel.app/question', {
       email: localStorage.getItem('chem'),
       title: title,
       description: description

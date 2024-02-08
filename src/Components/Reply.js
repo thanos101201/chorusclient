@@ -85,6 +85,11 @@ function Reply(props) {
       );
     }
     if(condition){
+      if(cond3){
+        return(
+          <div></div>
+        );
+      }
       return(
         <Button disabled={cond3} style={{backgroundColor:'white', border:'0px'}} onClick={() => {
           axios.post('http://localhost:3001/reply/dislike', {

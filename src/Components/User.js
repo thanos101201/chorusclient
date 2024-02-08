@@ -95,7 +95,7 @@ function User() {
   return (
     <div className='container'>
         <div className='row d-flex justify-content-center mt-5'>
-            <div className='col-10 col-md-1 d-flex align-items-center'></div>
+            <div className='col-12 col-md-1 d-flex align-items-center'></div>
                 {renderUser()}
         </div>
     </div>

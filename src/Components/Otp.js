@@ -42,7 +42,7 @@ function Otp() {
   }, [text]);
   const sendOtp = () => {
     if(text === 'Get OTP'){
-      axios.get('http://localhost:3001/otp', {
+      axios.get('https://chorusserver.vercel.app/otp', {
         headers: {
           email: email
         }
@@ -61,13 +61,13 @@ function Otp() {
       });
     }
     else{
-      axios.post('http://localhost:3001/otp', {
+      axios.post('https://chorusserver.vercel.app/otp', {
         email: email,
         otp: otp
       }).then((response) => {
         if(response.data.message === 'Otp Verified'){
           localStorage.setItem('chem', email);
-          window.open("http://localhost:3000/sign", "_self");
+          window.open("https://chorusclient.vercel.app/sign", "_self");
         }
         else{
           // { // { // { alert('Invalid otp');

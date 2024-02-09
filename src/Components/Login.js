@@ -8,13 +8,13 @@ function Login() {
   const [ password, setPassword ] = useState("");
 
   const handleLogin = () => {
-    axios.post('http://localhost:3001/user/login', {
+    axios.post('https://chorusserver.vercel.app/user/login', {
       email: email,
       password: password
     }).then((response) => {
       if(response.data.message === 'User can proceed'){
         localStorage.setItem('chem', email);
-        window.open("http://localhost:3000/question", "_self");
+        window.open("https://chorusclient.vercel.app/question", "_self");
       }
     }).catch((eror) => {
       // { alerteror.message);
@@ -69,7 +69,7 @@ function Login() {
                         </div>
                         <div className='col-10 col-md-6 d-flex align-items-center'>
                           <Button className='m-1 btn btn-danger' onClick={() => {
-                            window.open("http://localhost:3000/otp", "_self");
+                            window.open("https://chorusclient.vercel.app/otp", "_self");
                           }}>Sign In</Button>
                         </div>
                       </div>

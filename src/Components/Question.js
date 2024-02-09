@@ -4,9 +4,12 @@ import { Accordion, AccordionBody, AccordionHeader, AccordionItem, Button, Card,
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import User from './User';
+import { useLocation } from 'react-router-dom';
 
 function Question(props) {
 
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
   const [ question, setQuestion ] = useState([]);
   const [ id, setId ] = useState("");
   const [ renderAdd, setRenderAdd ] = useState(false);
@@ -29,8 +32,8 @@ function Question(props) {
   }
 
   useEffect(() => {
-    if(localStorage.getItem('chem') === undefined){
-      console.log(typeof(localStorage.getItem('chem')));
+    if(queryParams.get('email') === undefined){
+      console.log(typeof(queryParams.get('email')));
       window.open("http://localhost:3000/", "_self");
     }
     axios.get('http://localhost:3001/question/all').then((response) => {
@@ -59,12 +62,12 @@ function Question(props) {
   }
 
   const renderCheckButton = (email, id) => {
-    if(email !== localStorage.getItem('chem')){
+    if(email !== queryParams.get('email')){
       return(
         <Button className='btn btn-success' onClick={() => {
           setId(id);
-          localStorage.setItem('chrepid', id);
-          window.open("http://localhost:3000/home", "_self");
+          // localStorage.setItem('chrepid', id);
+          window.open(`http://localhost:3000/home?email=${email}&repid=${id}`, "_self");
         }}>Reply</Button>
       );
     }
@@ -165,7 +168,7 @@ function Question(props) {
 
   const handleAddQuesion = () => {
     axios.post('http://localhost:3001/question', {
-      email: localStorage.getItem('chem'),
+      email: queryParams.get('email'),
       title: title,
       description: description
     }).then((response) => {

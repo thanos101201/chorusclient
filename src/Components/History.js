@@ -4,8 +4,11 @@ import { AccordionItem, AccordionBody, AccordionHeader, Accordion, Button, Card,
 import { VscSend } from "react-icons/vsc";
 import axios from 'axios';
 import { AiOutlineLike, AiOutlineDislike, AiTwotoneDislike, AiTwotoneLike } from "react-icons/ai";
+import { useLocation } from 'react-router-dom';
 
 function History() {
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
   const [ replies, setReplies ] = useState([]);
   const [ id, setId ] = useState("");
   const [ open, setOpen ] = useState("");
@@ -22,15 +25,15 @@ function History() {
   useEffect(() => {
     axios.get('http://localhost:3001/question', {
       headers:{
-        id: localStorage.getItem('chrepid')
+        id: queryParams.get('repid')
       }
     }).then((response) => {
       console.log(response);
       if(response.data.message === 'The question is here'){
-        if(response.data.data[0].replyUsers.indexOf(localStorage.getItem('chem')) === -1 && response.data.data[0].historyUsers.indexOf(localStorage.getItem('chem')) === -1){
+        if(response.data.data[0].replyUsers.indexOf(queryParams.get('email')) === -1 && response.data.data[0].historyUsers.indexOf(queryParams.get('email')) === -1){
           setCond2(false);
         }
-        if(response.data.data[0].replyUsers.indexOf(localStorage.getItem('chem')) === -1 && response.data.data[0].historyUsers.indexOf(localStorage.getItem('chem')) !== -1){
+        if(response.data.data[0].replyUsers.indexOf(queryParams.get('email')) === -1 && response.data.data[0].historyUsers.indexOf(queryParams.get('email')) !== -1){
           setCond3(false);
         }
       }
@@ -138,8 +141,8 @@ function History() {
           <div className='col-10 col-md-2 d-flex align-items-center'>
             <Button onClick={() => {
               axios.post('http://localhost:3001/history/add', {
-                questionId: localStorage.getItem('chrepid'),
-                email: localStorage.getItem('chem'),
+                questionId: queryParams.get('repid'),
+                email: queryParams.get('email'),
                 replyText: reply
               }).then((response) => {
                 if(response.data.message === 'Reply added'){
@@ -166,8 +169,8 @@ function History() {
   }
 
   useEffect(() => {
-    let id = localStorage.getItem('chrepid');
-    setEmail(localStorage.getItem('chem'));
+    let id = queryParams.get('repid');
+    setEmail(queryParams.get('email'));
     setId(id);
     axios.get('http://localhost:3001/history', {
       headers: {
@@ -203,7 +206,7 @@ function History() {
   }, []);
 
   const checkDisabled = (ar) => {
-    if(ar.indexOf(localStorage.get('chem')) !== -1){
+    if(ar.indexOf(queryParams.get('email')) !== -1){
       return true;
     }
     return false;
@@ -261,7 +264,7 @@ function History() {
           <Button disabled={cond2} className='btn btn-danger' onClick={() => {
             axios.post('http://localhost:3001/history/join', {
               email: email,
-              questionId: localStorage.getItem('chrepid')
+              questionId: queryParams.get('repid')
             }).then((response) => {
               if(response.data.message === 'history joined'){
                 setReload(!reload);

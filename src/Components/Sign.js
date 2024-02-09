@@ -2,14 +2,16 @@ import React, { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Card, CardBody, CardHeader, CardTitle, Form, FormGroup, Input, Label } from 'reactstrap';
 import axios from 'axios';
-
+import { useLocation } from 'react-router-dom';
 function Sign() {
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
   const [ password, setPassword ] = useState("");
   const [ name, setName ] = useState("");
 
   const handleSign = () => {
     axios.post('http://localhost:3001/user', {
-      email: localStorage.getItem('chem'),
+      email: queryParams.get('email'),
       name: name,
       password: password
     }).then((response) => {

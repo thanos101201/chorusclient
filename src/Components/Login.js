@@ -13,8 +13,8 @@ function Login() {
       password: password
     }).then((response) => {
       if(response.data.message === 'User can proceed'){
-        localStorage.setItem('chem', email);
-        window.open("http://localhost:3000/question", "_self");
+        // localStorage.setItem('chem', email);
+        window.open(`http://localhost:3000/question?email=${email}`, "_self");
       }
     }).catch((eror) => {
       // { alerteror.message);

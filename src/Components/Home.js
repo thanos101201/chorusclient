@@ -2,7 +2,6 @@ import React from 'react'
 import Reply from './Reply'
 import History from './History'
 import User from './User'
-
 function Home() {
   return (
     <div className='container'>

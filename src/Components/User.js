@@ -2,17 +2,19 @@ import React, { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Card, CardBody, CardFooter, CardHeader, CardTitle } from 'reactstrap';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom'; 
 
 function User() {
+    const { search } = useLocation();
+    const queryParams = new URLSearchParams(search);
     const [ user, setUser ] = useState({});
-
     useEffect(() => {
-        if(localStorage.getItem('chem') === undefined){
+        if(queryParams.get('email') === undefined){
             window.open("http://localhost:3000/", "_self");
         }
         axios.get('http://localhost:3001/user', {
             headers: {
-                email: localStorage.getItem('chem')
+                email: queryParams.get('email')
             }
         }).then((response) => {
             if(response.data.message === 'User is here'){
@@ -28,8 +30,8 @@ function User() {
     }, []);
 
     const renderUser = () => {
-        if(Object.keys(user).length === 0){
-            console.log(Object.keys(user).length);
+        if( user === undefined || user === null || Object.keys(user) === null || Object.keys(user).length === 0){
+            // console.log(Object.keys(user).length);
             return(
                 <div></div>
             );
@@ -80,7 +82,7 @@ function User() {
                             </div>
                             <div className='col-10 col-md-4 d-flex align-items-center m-1'>
                                 <Button onClick={() => {
-                                    localStorage.setItem('chem', "undefined");
+                                    // localStorage.setItem('chem', "undefined");
                                     window.open("http://localhost:3000/", "_self");
                                 }} className='btn btn-danger shadow-lg'>
                                     Log Out

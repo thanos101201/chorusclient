@@ -56,8 +56,8 @@ function Otp() {
         otp: otp
       }).then((response) => {
         if(response.data.message === 'Otp Verified'){
-          localStorage.setItem('chem', email);
-          window.open("http://localhost:3000/sign", "_self");
+          // localStorage.setItem('chem', email);
+          window.open(`http://localhost:3000/sign?email=${email}`, "_self");
         }
         else{
           // { // { // { alert('Invalid otp');

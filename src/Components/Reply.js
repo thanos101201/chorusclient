@@ -5,8 +5,11 @@ import { AccordionItem, AccordionBody, AccordionHeader, Accordion, Button, Card,
 import { useLocation } from 'react-router-dom';
 import { VscSend } from "react-icons/vsc";
 import { AiOutlineLike, AiOutlineDislike, AiTwotoneDislike, AiTwotoneLike } from "react-icons/ai";
+// import { useLocation } from 'react-router-dom'; 
 
 function Reply(props) {
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search)
   const [ replies, setReplies ] = useState([]);
   const [ id, setId ] = useState("");
   const [ open, setOpen ] = useState("");
@@ -39,7 +42,7 @@ function Reply(props) {
       return(
         <Button disabled={cond3} style={{backgroundColor:'white', border:'0px'}} onClick={() => {
           axios.post('http://localhost:3001/reply/like', {
-            email: localStorage.getItem('chem'),
+            email: queryParams.get('email'),
             replyId: id
           }).then((response) => {
             if(response.data.message === 'Reply liked'){
@@ -70,9 +73,9 @@ function Reply(props) {
       return(
         <Button className='btn btn-success' onClick={() => {
           axios.post('http://localhost:3001/history', {
-            email: localStorage.getItem('chem'),
+            email: queryParams.get('email'),
             replyId: id,
-            questionId: localStorage.getItem('chrepid'),
+            questionId: queryParams.get('repid'),
             replyText: txt
           }).then((response) => {
             if(response.data.message === 'History added'){
@@ -93,7 +96,7 @@ function Reply(props) {
       return(
         <Button disabled={cond3} style={{backgroundColor:'white', border:'0px'}} onClick={() => {
           axios.post('http://localhost:3001/reply/dislike', {
-            email: localStorage.getItem('chem'),
+            email: queryParams.get('email'),
             replyId: id
           }).then((response) => {
             if(response.data.message === 'Reply disliked'){
@@ -123,9 +126,9 @@ function Reply(props) {
 
   useEffect(() => {
     
-    let id = localStorage.getItem('chrepid');
+    let id = queryParams.get('repid');
 
-    setEmail(localStorage.getItem('chem'));
+    setEmail(queryParams.get('email'));
     setId(id);
     axios.get('http://localhost:3001/reply', {
       headers: {
@@ -154,7 +157,7 @@ function Reply(props) {
     }).then((response) => {
       if(response.data.message === 'Working history is here'){
         let history = response.data.data[0].users;
-        if(history.indexOf(localStorage.getItem('chem')) !== -1){
+        if(history.indexOf(queryParams.get('email')) !== -1){
           setDisabled(true);
         }
         else{
@@ -169,20 +172,20 @@ function Reply(props) {
   useEffect(() => {
     axios.get('http://localhost:3001/question', {
       headers: {
-        id: localStorage.getItem('chrepid')
+        id: queryParams.get('repid')
       }
     }).then((response) => {
-      // console.log(response.data.data[0].replyUsers.indexOf(localStorage.getItem('chem')) !== -1);
-      // console.log(response.data.data[0].historyUsers.indexOf(localStorage.getItem('chem')) === -1);
+      // console.log(response.data.data[0].replyUsers.indexOf(queryParams.get('email')) !== -1);
+      // console.log(response.data.data[0].historyUsers.indexOf(queryParams.get('email')) === -1);
       if(response.data.message === 'The question is here'){
-        console.log(response.data.data[0].replyUsers.indexOf(localStorage.getItem('chem')) !== -1);
-        if(response.data.data[0].replyUsers.indexOf(localStorage.getItem('chem')) === -1 && response.data.data[0].historyUsers.indexOf(localStorage.getItem('chem')) === -1){
+        console.log(response.data.data[0].replyUsers.indexOf(queryParams.get('email')) !== -1);
+        if(response.data.data[0].replyUsers.indexOf(queryParams.get('email')) === -1 && response.data.data[0].historyUsers.indexOf(queryParams.get('email')) === -1){
           setCond2(false);
         }
-        if(response.data.data[0].replyUsers.indexOf(localStorage.getItem('chem')) !== -1 && response.data.data[0].historyUsers.indexOf(localStorage.getItem('chem')) === -1){
+        if(response.data.data[0].replyUsers.indexOf(queryParams.get('email')) !== -1 && response.data.data[0].historyUsers.indexOf(queryParams.get('email')) === -1){
           setCond3(false);
         }
-        if(response.data.data[0].replyUsers.indexOf(localStorage.getItem('chem')) === -1 && response.data.data[0].historyUsers.indexOf(localStorage.getItem('chem')) !== -1){
+        if(response.data.data[0].replyUsers.indexOf(queryParams.get('email')) === -1 && response.data.data[0].historyUsers.indexOf(queryParams.get('email')) !== -1){
           setCond4(true);
         }
       }
@@ -194,7 +197,7 @@ function Reply(props) {
     })
   }, [])
   const checkDisabled = (ar) => {
-    if(ar.indexOf(localStorage.getItem('chem')) !== -1){
+    if(ar.indexOf(queryParams.get('email')) !== -1){
       return true;
     }
     return false;
@@ -230,7 +233,7 @@ function Reply(props) {
                 <div className='col-4 d-flex align-items-center m-1'>
                   {/* <Button className='btn btn-success' disabled={disabled || checkDisabled(e.upVotes)} onClick={() => {
                     axios.post('http://localhost:3001/reply/like', {
-                      email: localStorage.getItem('chem'),
+                      email: queryParams.get('email'),
                       replyId : e._id
                     }).then((response) => {
                       if(response.data.message === 'Reply liked'){
@@ -248,7 +251,7 @@ function Reply(props) {
                 <div className='col-4 d-flex align-items-center m-1'>
                   {/* <Button className='btn btn-danger' disabled={disabled || checkDisabled(e.downVotes)} onClick={() => {
                     axios.post('http://localhost:3001/reply/dislike', {
-                      email: localStorage.getItem('chem'),
+                      email: queryParams.get('email'),
                       replyId : e._id
                     }).then((response) => {
                       if(response.data.message === 'Reply disliked'){
@@ -287,8 +290,8 @@ function Reply(props) {
           <div className='col-10 col-md-2 d-flex align-items-center'>
             <Button onClick={() => {
               axios.post('http://localhost:3001/reply', {
-                email: localStorage.getItem('chem'),
-                questionId: localStorage.getItem('chrepid'),
+                email: queryParams.get('email'),
+                questionId: queryParams.get('repid'),
                 text: reply
               }).then((response) => {
                 if(response.data.message === 'Reply added'){
@@ -326,7 +329,7 @@ function Reply(props) {
           <Button disabled={cond2} className='btn btn-success' onClick={() => {
             axios.post('http://localhost:3001/reply/join', {
               email: email,
-              questionId: localStorage.getItem('chrepid')
+              questionId: queryParams.get('repid')
             }).then((response) => {
               if(response.data.message === 'Reply joined'){
                 setReload(!reload);

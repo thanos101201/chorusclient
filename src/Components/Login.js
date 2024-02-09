@@ -61,8 +61,8 @@ function Login() {
                       </div>
                     </FormGroup>
                     <FormGroup>
-                      <div className='row d-flex justify-content-center'>
-                        <div className='col-10 col-md-6 d-flex align-items-center g-3'>
+                      <div className='row d-flex justify-content-center g-3'>
+                        <div className='col-10 col-md-6 d-flex align-items-center'>
                           <Button className='m-1 btn btn-success' onClick={() => {
                             handleLogin();
                           }}>Login</Button>

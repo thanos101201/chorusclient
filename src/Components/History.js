@@ -23,7 +23,7 @@ function History() {
 
   
   useEffect(() => {
-    axios.get('http://localhost:3001/question', {
+    axios.get('https://chorusserver.vercel.app/question', {
       headers:{
         id: queryParams.get('repid')
       }
@@ -63,7 +63,7 @@ function History() {
     if(condition){
       return(
         <Button disabled={cond3} style={{backgroundColor:'white', border:'0px'}} onClick={() => {
-          axios.post('http://localhost:3001/history/like', {
+          axios.post('https://chorusserver.vercel.app/history/like', {
             email: email,
             id: id
           }).then((response) => {
@@ -99,7 +99,7 @@ function History() {
     if(condition){
       return(
         <Button disabled={cond3} style={{backgroundColor:'white', border:'0px'}} onClick={() => {
-          axios.post('http://localhost:3001/history/dislike', {
+          axios.post('https://chorusserver.vercel.app/history/dislike', {
             email: email,
             id: id
           }).then((response) => {
@@ -140,7 +140,7 @@ function History() {
           </div>
           <div className='col-10 col-md-2 d-flex align-items-center'>
             <Button onClick={() => {
-              axios.post('http://localhost:3001/history/add', {
+              axios.post('https://chorusserver.vercel.app/history/add', {
                 questionId: queryParams.get('repid'),
                 email: queryParams.get('email'),
                 replyText: reply
@@ -172,7 +172,7 @@ function History() {
     let id = queryParams.get('repid');
     setEmail(queryParams.get('email'));
     setId(id);
-    axios.get('http://localhost:3001/history', {
+    axios.get('https://chorusserver.vercel.app/history', {
       headers: {
         id : id
       }
@@ -187,7 +187,7 @@ function History() {
   }, [reload]);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/reply', {
+    axios.get('https://chorusserver.vercel.app/reply', {
       headers: {
         id: id
       }
@@ -262,7 +262,7 @@ function History() {
       <div className='row d-flex justify-content-left mt-5'>
         <div className='col-12 col-md-8 d-flex align-items-center'>
           <Button disabled={cond2} className='btn btn-danger' onClick={() => {
-            axios.post('http://localhost:3001/history/join', {
+            axios.post('https://chorusserver.vercel.app/history/join', {
               email: email,
               questionId: queryParams.get('repid')
             }).then((response) => {

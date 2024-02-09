@@ -10,9 +10,9 @@ function User() {
     const [ user, setUser ] = useState({});
     useEffect(() => {
         if(queryParams.get('email') === undefined){
-            window.open("http://localhost:3000/", "_self");
+            window.open("https://chorusclient.vercel.app/", "_self");
         }
-        axios.get('http://localhost:3001/user', {
+        axios.get('https://chorusserver.vercel.app/user', {
             headers: {
                 email: queryParams.get('email')
             }
@@ -75,7 +75,7 @@ function User() {
                         <div className='row d-flex justify-content-center'>
                             <div className='col-10 col-md-4 d-flex align-items-center'>
                                 <Button className='btn btn-success m-1 shadow-lg' onClick={() => {
-                                    window.open("http://localhost:3000/question", "_self");
+                                    window.open(`https://chorusclient.vercel.app/question?email=${queryParams.get('email')}`, "_self");
                                 }}>
                                     Questions
                                 </Button>
@@ -83,7 +83,7 @@ function User() {
                             <div className='col-10 col-md-4 d-flex align-items-center m-1'>
                                 <Button onClick={() => {
                                     // localStorage.setItem('chem', "undefined");
-                                    window.open("http://localhost:3000/", "_self");
+                                    window.open("https://chorusclient.vercel.app/", "_self");
                                 }} className='btn btn-danger shadow-lg'>
                                     Log Out
                                 </Button>

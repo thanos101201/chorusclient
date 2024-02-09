@@ -41,7 +41,7 @@ function Reply(props) {
     if(condition){
       return(
         <Button disabled={cond3} style={{backgroundColor:'white', border:'0px'}} onClick={() => {
-          axios.post('http://localhost:3001/reply/like', {
+          axios.post('https://chorusserver.vercel.app/reply/like', {
             email: queryParams.get('email'),
             replyId: id
           }).then((response) => {
@@ -72,7 +72,7 @@ function Reply(props) {
     if(str === 'History' && cond4){
       return(
         <Button className='btn btn-success' onClick={() => {
-          axios.post('http://localhost:3001/history', {
+          axios.post('https://chorusserver.vercel.app/history', {
             email: queryParams.get('email'),
             replyId: id,
             questionId: queryParams.get('repid'),
@@ -95,7 +95,7 @@ function Reply(props) {
       }
       return(
         <Button disabled={cond3} style={{backgroundColor:'white', border:'0px'}} onClick={() => {
-          axios.post('http://localhost:3001/reply/dislike', {
+          axios.post('https://chorusserver.vercel.app/reply/dislike', {
             email: queryParams.get('email'),
             replyId: id
           }).then((response) => {
@@ -130,7 +130,7 @@ function Reply(props) {
 
     setEmail(queryParams.get('email'));
     setId(id);
-    axios.get('http://localhost:3001/reply', {
+    axios.get('https://chorusserver.vercel.app/reply', {
       headers: {
         id : id
       }
@@ -150,7 +150,7 @@ function Reply(props) {
   }, [reload]);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/history', {
+    axios.get('https://chorusserver.vercel.app/history', {
       headers: {
         questionId: id
       }
@@ -170,7 +170,7 @@ function Reply(props) {
   }, []);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/question', {
+    axios.get('https://chorusserver.vercel.app/question', {
       headers: {
         id: queryParams.get('repid')
       }
@@ -232,7 +232,7 @@ function Reply(props) {
               <div className='row d-flex justify-content-center'>
                 <div className='col-4 d-flex align-items-center m-1'>
                   {/* <Button className='btn btn-success' disabled={disabled || checkDisabled(e.upVotes)} onClick={() => {
-                    axios.post('http://localhost:3001/reply/like', {
+                    axios.post('https://chorusserver.vercel.app/reply/like', {
                       email: queryParams.get('email'),
                       replyId : e._id
                     }).then((response) => {
@@ -250,7 +250,7 @@ function Reply(props) {
                 </div>
                 <div className='col-4 d-flex align-items-center m-1'>
                   {/* <Button className='btn btn-danger' disabled={disabled || checkDisabled(e.downVotes)} onClick={() => {
-                    axios.post('http://localhost:3001/reply/dislike', {
+                    axios.post('https://chorusserver.vercel.app/reply/dislike', {
                       email: queryParams.get('email'),
                       replyId : e._id
                     }).then((response) => {
@@ -289,7 +289,7 @@ function Reply(props) {
           </div>
           <div className='col-10 col-md-2 d-flex align-items-center'>
             <Button onClick={() => {
-              axios.post('http://localhost:3001/reply', {
+              axios.post('https://chorusserver.vercel.app/reply', {
                 email: queryParams.get('email'),
                 questionId: queryParams.get('repid'),
                 text: reply
@@ -327,7 +327,7 @@ function Reply(props) {
       <div className='row d-flex justify-content-left mt-5'>
         <div className='col-12 col-md-8 d-flex align-items-center'>
           <Button disabled={cond2} className='btn btn-success' onClick={() => {
-            axios.post('http://localhost:3001/reply/join', {
+            axios.post('https://chorusserver.vercel.app/reply/join', {
               email: email,
               questionId: queryParams.get('repid')
             }).then((response) => {

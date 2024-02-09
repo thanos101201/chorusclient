@@ -24,6 +24,13 @@ function Otp() {
         </div>
       );
     }
+    else if(text === "Email already verified"){
+      return(
+        <div className='mr-2'>
+          <p style={{color:'red'}}>Email already registered</p>
+        </div>
+      );
+    }
     else{
       return(
         <div></div>
@@ -42,6 +49,9 @@ function Otp() {
       }).then((response) => {
         if(response.data.message === 'Otp is send'){
           setText("Verify Otp");
+        }
+        else if(response.data.message === 'Email already verified'){
+          setText('Email already verified');
         }
         else{
           // { // { alert(response.data.message);
@@ -90,7 +100,11 @@ function Otp() {
                           </Label>
                         </div>
                         <div className='col-10 col-md-8 d-flex align-items-center'>
-                          <Input placeholder='Enter your email' onChange={(e) => setEmail(e.target.value)} />
+                          <Input placeholder='Enter your email' onChange={(e) => {
+                              setEmail(e.target.value)
+                              setText("Get OTP");
+                            }
+                          } />
                         </div>
                       </div>
                     </FormGroup>
